@@ -26,6 +26,29 @@ const styles = StyleSheet.create({
   day: {
     color: '#ccc',
   },
+
+  //render city list
+  cityListContainer: {
+    overflow: 'hidden',
+    borderRadius: 8,
+    marginTop: 12,
+  },
+  imageViewContainer: {
+    flexDirection: 'row',
+    padding: 20,
+    height: 80,
+    alignItems: 'center',
+  },
+  cityListLeft: {
+    flex: 1,
+  },
+  cityText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  cityListRight: {
+    width: 50,
+  },
 })
 
 export default styles

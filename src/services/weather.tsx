@@ -1,5 +1,11 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
-import {ForecastRequestType, ForecastResponseType} from './lib/types'
+import {
+  CurrentResponseType,
+  ForecastRequestType,
+  ForecastResponseType,
+  SearchCityRequest,
+  SearchCityResponseType,
+} from './lib/types'
 import env from './lib/env.json'
 
 const commonParam = {
@@ -13,7 +19,7 @@ export const weatherApi = createApi({
     baseUrl: env.baseUrl,
   }),
   endpoints: builder => ({
-    getCurrent: builder.query<any, {q: string}>({
+    getCurrent: builder.query<CurrentResponseType, {q: string}>({
       query: arg => {
         const {q} = arg
         return {
@@ -32,7 +38,24 @@ export const weatherApi = createApi({
         }
       },
     }),
+    getSearchCity: builder.mutation<
+      Array<SearchCityResponseType>,
+      SearchCityRequest
+    >({
+      query: arg => {
+        const {q} = arg
+        return {
+          url: '/search.json',
+          method: 'GET',
+          params: {...commonParam, q},
+        }
+      },
+    }),
   }),
 })
 
-export const {useGetCurrentQuery, useGetForecastMutation} = weatherApi
+export const {
+  useGetCurrentQuery,
+  useGetForecastMutation,
+  useGetSearchCityMutation,
+} = weatherApi

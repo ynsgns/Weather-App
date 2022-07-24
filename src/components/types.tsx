@@ -1,5 +1,5 @@
 import {WeathersType} from '../assets'
-import {ConditionType} from '../services/lib/types'
+import {ConditionType, LocationType} from '../services/lib/types'
 
 export type RenderDayType = {
   day: string
@@ -7,4 +7,9 @@ export type RenderDayType = {
   wather: WeathersType
   today?: boolean
   condition?: ConditionType
+}
+
+export type RendercirtProps = {
+  cityName: string
+  onPress: (location: LocationType) => void
 }

@@ -1,6 +1,4 @@
-import {Dimensions, StyleSheet} from 'react-native'
-
-const WIDTH = Dimensions.get('window').width
+import {StyleSheet} from 'react-native'
 
 const styles = StyleSheet.create({
   flex1: {
@@ -22,6 +20,29 @@ const styles = StyleSheet.create({
   searchInput: {
     margin: 0,
     padding: 0,
+  },
+  autocompleView: {
+    backgroundColor: '#FFF',
+    position: 'absolute',
+    top: 35,
+    left: 20,
+    zIndex: 2,
+    width: '100%',
+    padding: 20,
+    //
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
+  //
+  renderSearchItem: {
+    padding: 8,
   },
   //
   cityListContainer: {

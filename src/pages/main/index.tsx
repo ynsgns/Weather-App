@@ -15,20 +15,23 @@ import styles from './style'
 import RenderDay from '../../components/renderday'
 import WaveLine from '../../components/vaweLine'
 import {useGetForecastMutation} from '../../services/weather'
-import {formatLongTime} from '../../helper/helper'
 import {MainAppProps} from './types'
+import {useIsFocused} from '@react-navigation/native'
 
 function MainApp({navigation}: MainAppProps) {
   const [getForecast, {isLoading, data, error}] = useGetForecastMutation()
+  const isFocused = useIsFocused()
+
   const {forecast, current, location} = data || {}
-  const {condition} = current || {}
+  const {condition, feelslike_c} = current || {}
   const {forecastday} = forecast || {}
-  const {region, localtime} = location || {}
+  // localtime
+  const {region} = location || {}
 
   useEffect(() => {
-    getData()
+    isFocused && getData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [isFocused])
 
   const getLocations = () => {
     console.log('*************************************************')
@@ -50,10 +53,6 @@ function MainApp({navigation}: MainAppProps) {
     try {
       const cityName = await AsyncStorage.getItem('@cityName')
       if (cityName !== null) {
-        console.log('*********************************************')
-        console.log('***************    cityName   ***************')
-        console.log('*********************************************')
-
         getForecast({
           q: cityName,
           days: 3,
@@ -65,6 +64,7 @@ function MainApp({navigation}: MainAppProps) {
       getLocations()
     }
   }
+  console.log('data', data)
 
   const storeData = async (value: string) => {
     try {
@@ -75,9 +75,13 @@ function MainApp({navigation}: MainAppProps) {
   }
 
   const getBgLottie = (): string => {
+    console.log('condition?.text', condition?.text)
+
     switch (condition?.text) {
       case 'Güneşli':
         return assets.lotties.bg.summer
+      case 'Açık':
+        return assets.lotties.bg.cloudy
       default:
         return assets.lotties.bg.summer
     }
@@ -113,10 +117,13 @@ function MainApp({navigation}: MainAppProps) {
 
         <View style={styles.main}>
           <View style={styles.titleView}>
-            {localtime && (
+            {/* {localtime && (
               <Text style={styles.titleText}>{formatLongTime(localtime)}</Text>
-            )}
-            <Text>{region}</Text>
+            )} */}
+            <Text style={styles.titleText}>
+              {feelslike_c}° {condition?.text}
+            </Text>
+            <Text style={styles.titleText}>{region}</Text>
           </View>
           <View style={styles.weatherContent}>
             {forecastday?.map((day, index) => (

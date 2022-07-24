@@ -8,7 +8,26 @@ export type ForecastResponseType = {
   location: LocationType
 }
 
-type LocationType = {
+export type CurrentResponseType = {
+  current: CurrentType
+  location: LocationType
+}
+
+export type SearchCityRequest = {
+  q: string
+}
+
+export type SearchCityResponseType = {
+  id: number
+  name: string
+  region: string
+  country: string
+  lat: number
+  lon: number
+  url: string
+}
+
+export type LocationType = {
   country: string
   localtime: string
   name: string
@@ -22,12 +41,14 @@ type LocationType = {
 type CurrentType = {
   condition: ConditionType
   last_updated: string
+  feelslike_c: number
+  temp_c: number
 }
 
 export type ConditionType = {
   code: number
   icon: string
-  text: 'Güneşli'
+  text: 'Güneşli' | 'Açık'
 }
 
 type ForecastType = {
