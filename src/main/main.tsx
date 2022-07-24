@@ -24,8 +24,6 @@ function MainApp() {
   const {forecastday} = forecast || {}
   const {country, name, localtime} = location || {}
 
-  console.log('data', data)
-
   const getBgLottie = (): string => {
     switch (condition?.text) {
       case 'Güneşli':
@@ -36,14 +34,14 @@ function MainApp() {
     }
   }
 
-  let weekday = localtime
-    ? new Date(localtime).toLocaleString('tr-tr', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
-    : ''
+  const formatDate = (date: string): string => {
+    return new Date(date).toLocaleString('tr-tr', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  }
 
   return isLoading ? (
     <View style={styles.flex1center}>
@@ -70,7 +68,9 @@ function MainApp() {
 
         <View style={styles.main}>
           <View style={styles.titleView}>
-            <Text style={styles.titleText}>{weekday}</Text>
+            {localtime && (
+              <Text style={styles.titleText}>{formatDate(localtime)}</Text>
+            )}
             <Text>
               {name}, {country}
             </Text>
