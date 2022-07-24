@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
   },
   lottie_weathers: {
     width: 40,
+    height: 40,
   },
   weather_text: {
     fontSize: 12,

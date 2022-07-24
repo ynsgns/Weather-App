@@ -6,6 +6,11 @@ const styles = StyleSheet.create({
   flex1: {
     flex: 1,
   },
+  flex1center: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   lottie: {
     width: WIDTH,
   },
@@ -44,6 +49,8 @@ const styles = StyleSheet.create({
     right: 10,
     top: -100,
     zIndex: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
 
     //shadow
     shadowColor: '#000',
@@ -58,8 +65,12 @@ const styles = StyleSheet.create({
   },
 
   imageIcon: {
-    width: 50,
-    height: 50,
+    width: 35,
+    height: 35,
+  },
+  textSoft: {
+    color: '#ccc',
+    fontSize: 10,
   },
 })
 

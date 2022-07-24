@@ -1,16 +1,62 @@
 import React from 'react'
-import {Image, SafeAreaView, Text, TouchableOpacity, View} from 'react-native'
+import {
+  ActivityIndicator,
+  Image,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import Lottie from 'lottie-react-native'
 import assets from '../assets'
 import styles from './style'
 import RenderDay from './lib/renderday'
 import WaveLine from './lib/vaweLine'
+import {useGetForecastQuery} from '../services/weather'
 
 function MainApp() {
-  return (
+  const {data, error, isLoading} = useGetForecastQuery({
+    q: 'Izmir',
+    days: 3,
+  })
+  const {forecast, current, location} = data || {}
+  const {condition} = current || {}
+  const {forecastday} = forecast || {}
+  const {country, name, localtime} = location || {}
+
+  console.log('data', data)
+
+  const getBgLottie = (): string => {
+    switch (condition?.text) {
+      case 'Güneşli':
+        return assets.lotties.bg.summer
+
+      default:
+        return assets.lotties.bg.summer
+    }
+  }
+
+  let weekday = localtime
+    ? new Date(localtime).toLocaleString('tr-tr', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    : ''
+
+  return isLoading ? (
+    <View style={styles.flex1center}>
+      <ActivityIndicator />
+    </View>
+  ) : error ? (
+    <View style={styles.flex1center}>
+      <Text>Something went wrong</Text>
+    </View>
+  ) : (
     <SafeAreaView style={styles.flex1}>
       <Lottie
-        source={assets.lotties.bg.summer}
+        source={getBgLottie()}
         style={styles.lottie}
         autoSize
         autoPlay
@@ -24,24 +70,32 @@ function MainApp() {
 
         <View style={styles.main}>
           <View style={styles.titleView}>
-            <Text style={styles.titleText}>24 Temmuz 2022</Text>
-            <Text>KONAK, İZMİR</Text>
+            <Text style={styles.titleText}>{weekday}</Text>
+            <Text>
+              {name}, {country}
+            </Text>
           </View>
           <View style={styles.weatherContent}>
-            <RenderDay
-              day="Pzts"
-              today
-              temperature=" 36° / 20°"
-              wather="foggy"
-            />
-            <RenderDay
-              day="Salı"
-              temperature=" 32° / 20°"
-              wather="cloudynight"
-            />
-            <RenderDay day="Çarş" temperature=" 31° / 20°" wather="mist" />
-            <RenderDay day="Perş" temperature=" 29° / 20°" wather="mist" />
-            <RenderDay day="Cuma" temperature=" 25° / 20°" wather="mist" />
+            {forecastday?.map((day, index) => (
+              <RenderDay
+                key={index}
+                day={day.date}
+                today={
+                  day.date.slice(0, 10) === current?.last_updated.slice(0, 10)
+                }
+                temperature={
+                  day.day.maxtemp_c.toFixed(0) +
+                  '° / ' +
+                  day.day.mintemp_c.toFixed(0) +
+                  '°'
+                }
+                wather="mist"
+                condition={day.day.condition}
+              />
+            ))}
+          </View>
+          <View style={styles.flex1center}>
+            <Text style={styles.textSoft}>via WeatherAPI.com</Text>
           </View>
         </View>
       </View>
