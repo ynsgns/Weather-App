@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {
   ActivityIndicator,
   Image,
@@ -12,17 +12,33 @@ import assets from '../assets'
 import styles from './style'
 import RenderDay from './lib/renderday'
 import WaveLine from './lib/vaweLine'
-import {useGetForecastQuery} from '../services/weather'
+import {useGetForecastMutation} from '../services/weather'
+import Geolocation from '@react-native-community/geolocation'
+import {formatLongTime} from './lib/helper'
 
 function MainApp() {
-  const {data, error, isLoading} = useGetForecastQuery({
-    q: 'Izmir',
-    days: 3,
-  })
+  const [getForecast, {isLoading, data, error}] = useGetForecastMutation()
   const {forecast, current, location} = data || {}
   const {condition} = current || {}
   const {forecastday} = forecast || {}
-  const {country, name, localtime} = location || {}
+  const {region, localtime} = location || {}
+
+  console.log('data', data)
+
+  useEffect(() => {
+    getLocations()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const getLocations = () => {
+    Geolocation.getCurrentPosition(info => {
+      getForecast({
+        q: info.coords.latitude + ',' + info.coords.longitude,
+        days: 3,
+      })
+      Geolocation.stopObserving()
+    })
+  }
 
   const getBgLottie = (): string => {
     switch (condition?.text) {
@@ -32,15 +48,6 @@ function MainApp() {
       default:
         return assets.lotties.bg.summer
     }
-  }
-
-  const formatDate = (date: string): string => {
-    return new Date(date).toLocaleString('tr-tr', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
   }
 
   return isLoading ? (
@@ -69,11 +76,9 @@ function MainApp() {
         <View style={styles.main}>
           <View style={styles.titleView}>
             {localtime && (
-              <Text style={styles.titleText}>{formatDate(localtime)}</Text>
+              <Text style={styles.titleText}>{formatLongTime(localtime)}</Text>
             )}
-            <Text>
-              {name}, {country}
-            </Text>
+            <Text>{region}</Text>
           </View>
           <View style={styles.weatherContent}>
             {forecastday?.map((day, index) => (

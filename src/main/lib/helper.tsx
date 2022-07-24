@@ -21,3 +21,12 @@ export const getPath = (): string => {
 
   return wavePath
 }
+
+export const formatLongTime = (date: string): string => {
+  return new Date(date).toLocaleString('tr-tr', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+}

@@ -1,3 +1,7 @@
+export type ForecastRequestType = {
+  q: string
+  days: number
+}
 export type ForecastResponseType = {
   current: CurrentType
   forecast: ForecastType
