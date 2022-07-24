@@ -2,7 +2,7 @@ import React from 'react'
 import {View} from 'react-native'
 import Svg, {Polygon} from 'react-native-svg'
 import styles from './style'
-import {getPath} from './helper'
+import {getPath} from '../helper/helper'
 
 function WaveLine() {
   return (

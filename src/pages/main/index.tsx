@@ -7,48 +7,83 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import Lottie from 'lottie-react-native'
-import assets from '../assets'
-import styles from './style'
-import RenderDay from './lib/renderday'
-import WaveLine from './lib/vaweLine'
-import {useGetForecastMutation} from '../services/weather'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Geolocation from '@react-native-community/geolocation'
-import {formatLongTime} from './lib/helper'
+import Lottie from 'lottie-react-native'
+import assets from '../../assets'
+import styles from './style'
+import RenderDay from '../../components/renderday'
+import WaveLine from '../../components/vaweLine'
+import {useGetForecastMutation} from '../../services/weather'
+import {formatLongTime} from '../../helper/helper'
+import {MainAppProps} from './types'
 
-function MainApp() {
+function MainApp({navigation}: MainAppProps) {
   const [getForecast, {isLoading, data, error}] = useGetForecastMutation()
   const {forecast, current, location} = data || {}
   const {condition} = current || {}
   const {forecastday} = forecast || {}
   const {region, localtime} = location || {}
 
-  console.log('data', data)
-
   useEffect(() => {
-    getLocations()
+    getData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const getLocations = () => {
+    console.log('*************************************************')
+    console.log('***************    getLocations   ***************')
+    console.log('*************************************************')
+
     Geolocation.getCurrentPosition(info => {
+      const city = info.coords.latitude + ',' + info.coords.longitude
+      storeData(city)
       getForecast({
-        q: info.coords.latitude + ',' + info.coords.longitude,
+        q: city,
         days: 3,
       })
       Geolocation.stopObserving()
     })
   }
 
+  const getData = async () => {
+    try {
+      const cityName = await AsyncStorage.getItem('@cityName')
+      if (cityName !== null) {
+        console.log('*********************************************')
+        console.log('***************    cityName   ***************')
+        console.log('*********************************************')
+
+        getForecast({
+          q: cityName,
+          days: 3,
+        })
+      } else {
+        getLocations()
+      }
+    } catch (e) {
+      getLocations()
+    }
+  }
+
+  const storeData = async (value: string) => {
+    try {
+      await AsyncStorage.setItem('@cityName', value)
+    } catch (e) {
+      // saving error
+    }
+  }
+
   const getBgLottie = (): string => {
     switch (condition?.text) {
       case 'Güneşli':
         return assets.lotties.bg.summer
-
       default:
         return assets.lotties.bg.summer
     }
   }
+
+  const goChangeCityScreen = () => navigation.navigate('ChangeCityScreen')
 
   return isLoading ? (
     <View style={styles.flex1center}>
@@ -68,7 +103,10 @@ function MainApp() {
         loop
       />
       <View style={styles.bottomView}>
-        <TouchableOpacity style={styles.changeCityCont} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.changeCityCont}
+          activeOpacity={0.7}
+          onPress={goChangeCityScreen}>
           <Image source={assets.icons.plus} style={styles.imageIcon} />
         </TouchableOpacity>
         <WaveLine />

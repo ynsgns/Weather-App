@@ -25,6 +25,9 @@ const assets = {
   icons: {
     plus: require('./icons/plus.png'),
   },
+  img: {
+    banner: require('./img/banner.jpeg'),
+  },
 }
 
 export type WeathersType = 'cloudynight' | 'foggy' | 'mist'

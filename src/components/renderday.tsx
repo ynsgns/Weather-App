@@ -1,7 +1,7 @@
 import React from 'react'
 import {Image, Text, View} from 'react-native'
 import Lottie from 'lottie-react-native'
-import assets from '../../assets'
+import assets from '../assets'
 import styles from './style'
 import {RenderDayType} from './types'
 
