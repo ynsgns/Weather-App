@@ -27,6 +27,7 @@ const assets = {
   },
   img: {
     banner: require('./img/banner.jpeg'),
+    bg: require('./img/bg.jpg'),
   },
 }
 

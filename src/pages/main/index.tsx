@@ -2,6 +2,7 @@ import React, {useEffect} from 'react'
 import {
   ActivityIndicator,
   Image,
+  Platform,
   SafeAreaView,
   Text,
   TouchableOpacity,
@@ -17,6 +18,7 @@ import WaveLine from '../../components/vaweLine'
 import {useGetForecastMutation} from '../../services/weather'
 import {MainAppProps} from './types'
 import {useIsFocused} from '@react-navigation/native'
+import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions'
 
 function MainApp({navigation}: MainAppProps) {
   const [getForecast, {isLoading, data, error}] = useGetForecastMutation()
@@ -29,7 +31,7 @@ function MainApp({navigation}: MainAppProps) {
   const {region} = location || {}
 
   useEffect(() => {
-    isFocused && getData()
+    isFocused && checkPermission()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused])
 
@@ -47,6 +49,53 @@ function MainApp({navigation}: MainAppProps) {
       })
       Geolocation.stopObserving()
     })
+  }
+
+  const checkPermission = () => {
+    check(
+      Platform.OS === 'ios'
+        ? PERMISSIONS.IOS.LOCATION_ALWAYS
+        : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+    )
+      .then(result => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            console.log(
+              'This feature is not available (on this device / in this context)',
+            )
+            break
+          case RESULTS.DENIED:
+            request(PERMISSIONS.IOS.LOCATION_ALWAYS).then(resultReq => {
+              console.log(resultReq)
+              getData()
+            })
+            console.log(
+              'The permission has not been requested / is denied but requestable',
+            )
+            break
+          case RESULTS.LIMITED:
+            request(PERMISSIONS.IOS.LOCATION_ALWAYS).then(resultReq => {
+              console.log(resultReq)
+              getData()
+            })
+            console.log('The permission is limited: some actions are possible')
+            break
+          case RESULTS.GRANTED:
+            console.log('The permission is granted')
+            getData()
+            break
+          case RESULTS.BLOCKED:
+            request(PERMISSIONS.IOS.LOCATION_ALWAYS).then(resultReq => {
+              console.log(resultReq)
+              getData()
+            })
+            console.log('The permission is denied and not requestable anymore')
+            break
+        }
+      })
+      .catch((errorPerr: Object) => {
+        console.log('err', errorPerr)
+      })
   }
 
   const getData = async () => {

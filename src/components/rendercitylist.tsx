@@ -1,7 +1,5 @@
 import React from 'react'
-import {ImageBackground, Text, TouchableOpacity, View} from 'react-native'
-
-import assets from '../assets'
+import {Image, Text, TouchableOpacity, View} from 'react-native'
 import {useGetCurrentQuery} from '../services/weather'
 import styles from './style'
 import {RendercirtProps} from './types'
@@ -18,16 +16,18 @@ function RenderList({cityName, onPress}: RendercirtProps) {
 
   return (
     <TouchableOpacity style={styles.cityListContainer} onPress={selectCity}>
-      <ImageBackground
-        source={assets.img.banner}
-        style={styles.imageViewContainer}>
+      <View style={styles.imageViewContainer}>
         <View style={styles.cityListLeft}>
           <Text style={styles.cityText}>{data?.location.region}</Text>
         </View>
+        <Image
+          style={styles.lottie_weathers}
+          source={{uri: 'https:' + data?.current.condition.icon}}
+        />
         <View style={styles.cityListRight}>
           <Text style={styles.cityText}>{data?.current.temp_c}°</Text>
         </View>
-      </ImageBackground>
+      </View>
     </TouchableOpacity>
   )
 }

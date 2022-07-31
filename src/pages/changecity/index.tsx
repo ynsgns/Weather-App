@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {
   FlatList,
+  ImageBackground,
   SafeAreaView,
   Text,
   TextInput,
@@ -13,6 +14,7 @@ import {LocationType, SearchCityResponseType} from '../../services/lib/types'
 import RenderList from '../../components/rendercitylist'
 import styles from './style'
 import {ChangeCityScreenProps} from './types'
+import assets from '../../assets'
 
 function ChangeCityScreen({navigation}: ChangeCityScreenProps) {
   const [getSearch, {data}] = useGetSearchCityMutation()
@@ -72,7 +74,7 @@ function ChangeCityScreen({navigation}: ChangeCityScreenProps) {
 
   return (
     <SafeAreaView style={styles.flex1}>
-      <View style={styles.flex1}>
+      <ImageBackground source={assets.img.bg} style={styles.flex1}>
         <View style={styles.searchInputView}>
           <TextInput
             value={searchValue}
@@ -106,7 +108,7 @@ function ChangeCityScreen({navigation}: ChangeCityScreenProps) {
           )}
           showsVerticalScrollIndicator={false}
         />
-      </View>
+      </ImageBackground>
     </SafeAreaView>
   )
 }

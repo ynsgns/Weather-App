@@ -33,7 +33,9 @@ function RenderDay({
           />
         )}
       </View>
-      <Text style={today ? styles.weather_text : styles.weather_text_soft}>
+      <Text
+        numberOfLines={1}
+        style={today ? styles.weather_text : styles.weather_text_soft}>
         {condition?.text}
       </Text>
       <Text style={today ? styles.weather_text : styles.weather_text_soft}>

@@ -6,3 +6,10 @@ export type MainAppProps = NativeStackScreenProps<
   'MainScreen',
   'Stack'
 >
+
+export type PermissionStatus =
+  | 'unavailable'
+  | 'denied'
+  | 'limited'
+  | 'granted'
+  | 'blocked'

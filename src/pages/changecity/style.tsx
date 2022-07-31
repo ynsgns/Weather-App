@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native'
 const styles = StyleSheet.create({
   flex1: {
     flex: 1,
-    paddingHorizontal: 20,
+    padding: 20,
   },
   flex1center: {
     flex: 1,
@@ -15,7 +15,8 @@ const styles = StyleSheet.create({
     padding: 8,
     paddingHorizontal: 20,
     borderRadius: 50,
-    borderColor: '#aaa',
+    borderColor: '#FFF',
+    backgroundColor: '#FFF',
   },
   searchInput: {
     margin: 0,
@@ -24,8 +25,9 @@ const styles = StyleSheet.create({
   autocompleView: {
     backgroundColor: '#FFF',
     position: 'absolute',
-    top: 35,
+    top: 55,
     left: 20,
+    borderRadius: 20,
     zIndex: 2,
     width: '100%',
     padding: 20,

@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     padding: 20,
     height: 80,
     alignItems: 'center',
+    backgroundColor: '#FFF',
   },
   cityListLeft: {
     flex: 1,
