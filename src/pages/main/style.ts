@@ -72,6 +72,19 @@ const styles = StyleSheet.create({
     color: '#ccc',
     fontSize: 10,
   },
+  errorText: {
+    marginTop: 20,
+    color: '#F00',
+  },
+  tryAgainBtn: {
+    backgroundColor: '#EE4D4D',
+    borderRadius: 50,
+    padding: 10,
+    marginTop: 20,
+  },
+  tryAgainText: {
+    color: '#FFF',
+  },
 })
 
 export default styles

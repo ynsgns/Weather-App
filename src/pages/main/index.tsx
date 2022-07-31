@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react'
 import {
-  ActivityIndicator,
   Image,
   Platform,
   SafeAreaView,
@@ -36,10 +35,6 @@ function MainApp({navigation}: MainAppProps) {
   }, [isFocused])
 
   const getLocations = () => {
-    console.log('*************************************************')
-    console.log('***************    getLocations   ***************')
-    console.log('*************************************************')
-
     Geolocation.getCurrentPosition(info => {
       const city = info.coords.latitude + ',' + info.coords.longitude
       storeData(city)
@@ -140,11 +135,30 @@ function MainApp({navigation}: MainAppProps) {
 
   return isLoading ? (
     <View style={styles.flex1center}>
-      <ActivityIndicator />
+      <Lottie
+        source={assets.lotties.loading2}
+        style={styles.lottie}
+        autoSize
+        autoPlay
+        loop
+      />
     </View>
   ) : error ? (
     <View style={styles.flex1center}>
-      <Text>Something went wrong</Text>
+      <Lottie
+        source={assets.lotties.error}
+        style={styles.lottie}
+        autoSize
+        autoPlay
+        loop
+      />
+      <Text style={styles.errorText}>Something went wrong</Text>
+      <TouchableOpacity
+        style={styles.tryAgainBtn}
+        activeOpacity={0.7}
+        onPress={checkPermission}>
+        <Text style={styles.tryAgainText}>Try again</Text>
+      </TouchableOpacity>
     </View>
   ) : (
     <SafeAreaView style={styles.flex1}>

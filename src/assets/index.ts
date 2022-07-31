@@ -21,6 +21,9 @@ const assets = {
       thunder: require('./lotties/weathers/thunder.json'),
       windy: require('./lotties/weathers/windy.json'),
     },
+    error: require('./lotties/error.json'),
+    loading: require('./lotties/loading.json'),
+    loading2: require('./lotties/loading2.json'),
   },
   icons: {
     plus: require('./icons/plus.png'),
